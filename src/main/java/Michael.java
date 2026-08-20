@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 /**
  * Starts the Michael chatbot application.
  */
@@ -11,10 +13,21 @@ public class Michael {
         String divider = "____________________________________________________________";
 
         System.out.println(divider);
-        System.out.println("Hello! I'm Michael.");
-        System.out.println("What can I do for you?");
+        System.out.println("Hello! I'm Michael :)");
+        System.out.println("How may I help you?");
         System.out.println(divider);
-        System.out.println("Bye. Hope to see you again soon!");
+        Scanner input = new Scanner(System.in);
+        String command = input.nextLine();
+
+        while (!command.equals("bye")) {
+            System.out.println(divider);
+            System.out.println(command);
+            System.out.println(divider);
+            command = input.nextLine();
+        }
+
+        System.out.println(divider);
+        System.out.println("Bye. Hope we meet again!");
         System.out.println(divider);
     }
 }
