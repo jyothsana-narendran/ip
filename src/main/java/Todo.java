@@ -6,9 +6,10 @@ public class Todo extends Task {
      * Creates an incomplete to-do task.
      *
      * @param description the text describing the task
+     * @throws MichaelException if the task description is empty
      */
-    public Todo(String description) {
-        super(description);
+    public Todo(String description) throws MichaelException {
+        super(description, "todo");
     }
 
     /**

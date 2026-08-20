@@ -9,11 +9,18 @@ public class Task {
     protected boolean isDone;
 
     /**
-     * Creates an incomplete task with the given description.
+     * Creates an incomplete task with the given description and type.
      *
      * @param description the text describing the task
+     * @param taskType the human-readable type used in validation messages
+     * @throws MichaelException if the task description is empty
      */
-    public Task(String description) {
+    protected Task(String description, String taskType) throws MichaelException {
+        if (description == null || description.isBlank()) {
+            String article = taskType.equals("event") ? "an" : "a";
+            throw new MichaelException(" Oh No! The description of " + article + " "
+                    + taskType + " is empty. Please add a description after the task type");
+        }
         this.description = description;
         this.isDone = false;
     }

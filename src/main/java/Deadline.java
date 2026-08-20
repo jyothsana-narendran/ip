@@ -10,9 +10,10 @@ public class Deadline extends Task {
      *
      * @param description the text describing the task
      * @param by the time by which the task should be completed
+     * @throws MichaelException if the task description is empty
      */
-    public Deadline(String description, String by) {
-        super(description);
+    public Deadline(String description, String by) throws MichaelException {
+        super(description, "deadline");
         this.by = by;
     }
 

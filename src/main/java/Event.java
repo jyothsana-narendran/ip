@@ -14,9 +14,10 @@ public class Event extends Task {
      * @param description the text describing the event
      * @param from the event start time
      * @param to the event end time
+     * @throws MichaelException if the task description is empty
      */
-    public Event(String description, String from, String to) {
-        super(description);
+    public Event(String description, String from, String to) throws MichaelException {
+        super(description, "event");
         this.from = from;
         this.to = to;
     }
