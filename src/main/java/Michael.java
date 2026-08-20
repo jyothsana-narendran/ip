@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -17,8 +18,7 @@ public class Michael {
         System.out.println("How may I help you?");
         System.out.println(divider);
         Scanner input = new Scanner(System.in);
-        Task[] tasks = new Task[100];
-        int taskCount = 0;
+        ArrayList<Task> tasks = new ArrayList<>();
         String command = input.nextLine();
 
         while (!command.equals("bye")) {
@@ -26,36 +26,44 @@ public class Michael {
                 if (command.equals("list")) {
                     System.out.println(divider);
                     System.out.println(" Here are the tasks in your list:");
-                    for (int i = 0; i < taskCount; i++) {
-                        System.out.println(" " + (i + 1) + "." + tasks[i]);
+                    for (int i = 0; i < tasks.size(); i++) {
+                        System.out.println(" " + (i + 1) + "." + tasks.get(i));
                     }
                     System.out.println(divider);
                 } else if (command.startsWith("mark ")) {
                     int taskNumber = Integer.parseInt(command.substring(5));
-                    tasks[taskNumber - 1].markAsDone();
+                    tasks.get(taskNumber - 1).markAsDone();
 
                     System.out.println(divider);
                     System.out.println("Yay! You have finished this task:");
-                    System.out.println("   [X] " + tasks[taskNumber - 1].getDescription());
+                    System.out.println("   [X] " + tasks.get(taskNumber - 1).getDescription());
                     System.out.println(divider);
                 } else if (command.startsWith("unmark ")) {
                     int taskNumber = Integer.parseInt(command.substring(7));
-                    tasks[taskNumber - 1].markAsNotDone();
+                    tasks.get(taskNumber - 1).markAsNotDone();
 
                     System.out.println(divider);
                     System.out.println("This task is no longer marked as complete:");
-                    System.out.println("   [ ] " + tasks[taskNumber - 1].getDescription());
+                    System.out.println("   [ ] " + tasks.get(taskNumber - 1).getDescription());
+                    System.out.println(divider);
+                } else if (command.startsWith("delete ")) {
+                    int taskNumber = Integer.parseInt(command.substring(7));
+                    Task deletedTask = tasks.remove(taskNumber - 1);
+
+                    System.out.println(divider);
+                    System.out.println(" Noted. I've removed this task:");
+                    System.out.println("   " + deletedTask);
+                    System.out.println(" Now you have " + tasks.size() + " tasks in the list.");
                     System.out.println(divider);
                 } else if (command.equals("todo") || command.startsWith("todo ")) {
                     String description = command.substring(4).trim();
                     Task task = new Todo(description);
-                    tasks[taskCount] = task;
-                    taskCount++;
+                    tasks.add(task);
 
                     System.out.println(divider);
                     System.out.println(" Got it. I've added this task:");
                     System.out.println("   " + task);
-                    System.out.println(" Now you have " + taskCount + " tasks in the list.");
+                    System.out.println(" Now you have " + tasks.size() + " tasks in the list.");
                     System.out.println(divider);
                 } else if (command.equals("deadline") || command.startsWith("deadline ")) {
                     int byIndex = command.indexOf(" /by ");
@@ -63,13 +71,12 @@ public class Michael {
                             ? command.substring(8).trim() : command.substring(8, byIndex).trim();
                     String by = byIndex == -1 ? "" : command.substring(byIndex + 5);
                     Task task = new Deadline(description, by);
-                    tasks[taskCount] = task;
-                    taskCount++;
+                    tasks.add(task);
 
                     System.out.println(divider);
                     System.out.println(" Got it. I've added this task:");
                     System.out.println("   " + task);
-                    System.out.println(" Now you have " + taskCount + " tasks in the list.");
+                    System.out.println(" Now you have " + tasks.size() + " tasks in the list.");
                     System.out.println(divider);
                 } else if (command.equals("event") || command.startsWith("event ")) {
                     int fromIndex = command.indexOf(" /from ");
@@ -80,13 +87,12 @@ public class Michael {
                             ? "" : command.substring(fromIndex + 7, toIndex);
                     String to = toIndex == -1 ? "" : command.substring(toIndex + 5);
                     Task task = new Event(description, from, to);
-                    tasks[taskCount] = task;
-                    taskCount++;
+                    tasks.add(task);
 
                     System.out.println(divider);
                     System.out.println(" Got it. I've added this task:");
                     System.out.println("   " + task);
-                    System.out.println(" Now you have " + taskCount + " tasks in the list.");
+                    System.out.println(" Now you have " + tasks.size() + " tasks in the list.");
                     System.out.println(divider);
                 } else {
                     throw new MichaelException(" OOPS!!! I'm sorry, but I don't know what that means :-(");
