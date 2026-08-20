@@ -25,7 +25,7 @@ public class Michael {
         while (!command.equals("bye")) {
             if (command.equals("list")) {
                 System.out.println(divider);
-                System.out.println(" Here are the tasks in your list:");
+                System.out.println("This is your list of tasks:");
                 for (int i = 0; i < taskCount; i++) {
                     String status = isDone[i] ? "[X]" : "[ ]";
                     System.out.println(" " + (i + 1) + "." + status + " " + tasks[i]);
@@ -36,8 +36,16 @@ public class Michael {
                 isDone[taskNumber - 1] = true;
 
                 System.out.println(divider);
-                System.out.println(" Nice! I've marked this task as done:");
+                System.out.println("Yay! You have finished this task:");
                 System.out.println("   [X] " + tasks[taskNumber - 1]);
+                System.out.println(divider);
+            } else if (command.startsWith("unmark ")) {
+                int taskNumber = Integer.parseInt(command.substring(7));
+                isDone[taskNumber - 1] = false;
+
+                System.out.println(divider);
+                System.out.println("This task is no longer marked as complete:");
+                System.out.println("   [ ] " + tasks[taskNumber - 1]);
                 System.out.println(divider);
             } else {
                 tasks[taskCount] = command;
