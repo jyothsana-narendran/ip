@@ -1,6 +1,9 @@
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 /**
  * Starts the Michael chatbot application.
@@ -89,15 +92,24 @@ public class Michael {
                     if (by.isEmpty()) {
                         throw new MichaelException("Please provide a time after /by.");
                     }
-                    Task task = new Deadline(description, by);
-                    tasks.add(task);
-                    Storage.save(tasks);
+                    try {
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
+                        LocalDateTime deadline = LocalDateTime.parse(by, formatter);
 
-                    System.out.println(divider);
-                    System.out.println(" Got it. I've added this task:");
-                    System.out.println("   " + task);
-                    System.out.println(" Now you have " + tasks.size() + " tasks in the list.");
-                    System.out.println(divider);
+                        Task task = new Deadline(description, deadline);
+                        tasks.add(task);
+                        Storage.save(tasks);
+
+                        System.out.println(divider);
+                        System.out.println(" Got it. I've added this task:");
+                        System.out.println("   " + task);
+                        System.out.println(" Now you have " + tasks.size() + " tasks in the list.");
+                        System.out.println(divider);
+                    } catch (DateTimeParseException e) {
+                        throw new MichaelException(
+                                "Please enter the deadline in the format yyyy-MM-dd HHmm, e.g. 2019-12-02 1800."
+                        );
+                    }
                 } else if (command.equals("event") || command.startsWith("event ")) {
                     int fromIndex = command.indexOf(" /from ");
                     int toIndex = command.indexOf(" /to ");

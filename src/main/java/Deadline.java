@@ -1,38 +1,26 @@
 /**
  * Represents a task that should be completed by a specified time.
  */
-public class Deadline extends Task {
-    /** The time by which the task should be completed. */
-    protected String by;
+import java.time.LocalDateTime;
 
-    /**
-     * Creates an incomplete deadline task.
-     *
-     * @param description the text describing the task
-     * @param by the time by which the task should be completed
-     * @throws MichaelException if the task description is empty
-     */
-    public Deadline(String description, String by) throws MichaelException {
+public class Deadline extends Task {
+    /** The date and time by which the task should be completed. */
+    protected LocalDateTime by;
+
+    public Deadline(String description, LocalDateTime by) throws MichaelException {
         super(description, "deadline");
         this.by = by;
     }
 
-    /**
-     * Returns the deadline text.
-     *
-     * @return the time by which this task should be completed
-     */
-    public String getBy() {
+    public LocalDateTime getBy() {
         return by;
     }
 
-    /**
-     * Returns the text used to display this deadline task.
-     *
-     * @return the deadline task type, status, description, and deadline
-     */
     @Override
     public String toString() {
-        return "[D]" + super.toString() + " (by: " + by + ")";
+        return "[D]" + super.toString()
+                + " (by: " + by.format(
+                java.time.format.DateTimeFormatter.ofPattern("MMM dd yyyy HHmm"))
+                + ")";
     }
 }
