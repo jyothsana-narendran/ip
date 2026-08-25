@@ -3,34 +3,43 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 /**
  * Saves and loads the chatbot's tasks from a file on disk.
  */
 public class Storage {
-    /** The location where task data is stored relative to the project root. */
-    private static final Path FILE_PATH = Path.of("data", "michael.txt");
+    private final Path filePath;
+
+    public Storage(String filePath) {
+        this.filePath = Path.of(filePath);
+    }
 
     /**
      * Writes every task in the current list to the storage file atomically.
      *
-     * @param tasks the tasks to save
+     * @param taskList the tasks container to save
      * @throws IOException if the storage directory or file cannot be written
      */
-    public static void save(List<Task> tasks) throws IOException {
-        Files.createDirectories(FILE_PATH.getParent());
-        Path temporaryFile = Files.createTempFile(FILE_PATH.getParent(), "michael-", ".tmp");
+    public void save(TaskList taskList) throws IOException {
+        Path parent = filePath.getParent();
+        if (parent != null) {
+            Files.createDirectories(parent);
+        }
+
+        Path tempDir = parent != null ? parent : Path.of(".");
+        Path temporaryFile = Files.createTempFile(tempDir, "michael-", ".tmp");
+
         try {
-            Files.write(temporaryFile, tasks.stream().map(Storage::formatTask).toList());
-            Files.move(temporaryFile, FILE_PATH, StandardCopyOption.REPLACE_EXISTING,
+            Files.write(temporaryFile, taskList.getTasks().stream().map(this::formatTask).toList());
+            Files.move(temporaryFile, filePath, StandardCopyOption.REPLACE_EXISTING,
                     StandardCopyOption.ATOMIC_MOVE);
         } catch (java.nio.file.AtomicMoveNotSupportedException e) {
-            Files.move(temporaryFile, FILE_PATH, StandardCopyOption.REPLACE_EXISTING);
+            Files.move(temporaryFile, filePath, StandardCopyOption.REPLACE_EXISTING);
         } finally {
             Files.deleteIfExists(temporaryFile);
         }
@@ -43,13 +52,13 @@ public class Storage {
      * @throws IOException if the storage file cannot be read
      * @throws MichaelException if a saved task cannot be recreated
      */
-    public static List<Task> load() throws IOException, MichaelException {
-        if (Files.notExists(FILE_PATH)) {
+    public List<Task> load() throws IOException, MichaelException {
+        if (Files.notExists(filePath)) {
             return new ArrayList<>();
         }
 
         List<Task> tasks = new ArrayList<>();
-        List<String> lines = Files.readAllLines(FILE_PATH);
+        List<String> lines = Files.readAllLines(filePath);
         for (int i = 0; i < lines.size(); i++) {
             try {
                 tasks.add(createTask(lines.get(i)));
@@ -60,14 +69,7 @@ public class Storage {
         return tasks;
     }
 
-    /**
-     * Recreates one task from the line format produced by {@link #save(List)}.
-     *
-     * @param line one saved task
-     * @return the recreated task
-     * @throws MichaelException if the saved task has an invalid format or type
-     */
-    private static Task createTask(String line) throws MichaelException {
+    private Task createTask(String line) throws MichaelException {
         if (line.startsWith("[")) {
             return createLegacyTask(line);
         }
@@ -101,14 +103,7 @@ public class Storage {
         return task;
     }
 
-    /**
-     * Recreates a task saved by the previous display-based storage format.
-     *
-     * @param line one legacy saved task
-     * @return the recreated task
-     * @throws MichaelException if the legacy task has an invalid format or type
-     */
-    private static Task createLegacyTask(String line) throws MichaelException {
+    private Task createLegacyTask(String line) throws MichaelException {
         if (line.length() < 7 || line.charAt(0) != '[' || line.charAt(2) != ']'
                 || line.charAt(3) != '[' || line.charAt(5) != ']' || line.charAt(6) != ' '
                 || !(line.charAt(4) == ' ' || line.charAt(4) == 'X')) {
@@ -151,13 +146,7 @@ public class Storage {
         return task;
     }
 
-    /**
-     * Converts a task into a delimiter-safe storage record.
-     *
-     * @param task the task to store
-     * @return the task's storage record
-     */
-    private static String formatTask(Task task) {
+    private String formatTask(Task task) {
         String status = task.getStatusIcon().equals("X") ? "1" : "0";
         if (task instanceof Todo) {
             return "T|" + status + "|" + encode(task.getDescription());
@@ -171,36 +160,17 @@ public class Storage {
         throw new IllegalArgumentException("Unsupported task type.");
     }
 
-    /**
-     * Checks that a storage record has the expected number of fields.
-     *
-     * @param fields the fields in the record
-     * @param expectedCount the expected field count
-     * @throws MichaelException if the record has an invalid field count
-     */
-    private static void requireFieldCount(String[] fields, int expectedCount) throws MichaelException {
+    private void requireFieldCount(String[] fields, int expectedCount) throws MichaelException {
         if (fields.length != expectedCount) {
             throw new MichaelException("Saved task has an invalid format.");
         }
     }
 
-    /**
-     * Encodes text so it can safely appear in a pipe-delimited storage record.
-     *
-     * @param text the text to encode
-     * @return encoded text
-     */
-    private static String encode(String text) {
+    private String encode(String text) {
         return Base64.getEncoder().encodeToString(text.getBytes(StandardCharsets.UTF_8));
     }
 
-    /**
-     * Decodes text from a storage record.git
-     *
-     * @param text encoded text
-     * @return decoded text
-     */
-    private static String decode(String text) {
+    private String decode(String text) {
         return new String(Base64.getDecoder().decode(text), StandardCharsets.UTF_8);
     }
 }
