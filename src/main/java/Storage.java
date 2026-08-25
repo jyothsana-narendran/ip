@@ -6,6 +6,8 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Saves and loads the chatbot's tasks from a file on disk.
@@ -85,7 +87,7 @@ public class Storage {
             task = new Todo(decode(fields[2]));
         } else if (taskType.equals("D")) {
             requireFieldCount(fields, 4);
-            task = new Deadline(decode(fields[2]), decode(fields[3]));
+            task = new Deadline(decode(fields[2]), LocalDateTime.parse(decode(fields[3])));
         } else if (taskType.equals("E")) {
             requireFieldCount(fields, 5);
             task = new Event(decode(fields[2]), decode(fields[3]), decode(fields[4]));
@@ -123,8 +125,13 @@ public class Storage {
             if (byIndex < 0 || !details.endsWith(")")) {
                 throw new MichaelException("Saved task has an invalid format.");
             }
-            task = new Deadline(details.substring(0, byIndex),
-                    details.substring(byIndex + 6, details.length() - 1));
+            task = new Deadline(
+                    details.substring(0, byIndex),
+                    LocalDateTime.parse(
+                            details.substring(byIndex + 6, details.length() - 1),
+                            DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm")
+                    )
+            );
         } else if (taskType.equals("E")) {
             int fromIndex = details.lastIndexOf(" (from: ");
             int toIndex = details.lastIndexOf(" to: ");
@@ -155,7 +162,8 @@ public class Storage {
         if (task instanceof Todo) {
             return "T|" + status + "|" + encode(task.getDescription());
         } else if (task instanceof Deadline deadline) {
-            return "D|" + status + "|" + encode(task.getDescription()) + "|" + encode(deadline.getBy());
+            return "D|" + status + "|" + encode(task.getDescription())
+                    + "|" + encode(deadline.getBy().toString());
         } else if (task instanceof Event event) {
             return "E|" + status + "|" + encode(task.getDescription()) + "|" + encode(event.getFrom())
                     + "|" + encode(event.getTo());
@@ -187,7 +195,7 @@ public class Storage {
     }
 
     /**
-     * Decodes text from a storage record.
+     * Decodes text from a storage record.git
      *
      * @param text encoded text
      * @return decoded text
