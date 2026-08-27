@@ -21,3 +21,6 @@ text-ui-test/EXPECTED-UNIX.TXT
 
 # Chatbot task data
 /data/
+
+#jar files
+*.jar
