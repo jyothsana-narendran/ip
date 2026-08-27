@@ -2,6 +2,7 @@ package michael;
 
 import task.Task;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Starts the michael.Michael chatbot application.
@@ -81,6 +82,12 @@ public class Michael {
                         list.add(task);
                         storage.save(list);
                         ui.showTaskAdded(task, list.size());
+                        break;
+                    }
+                    case "find": {
+                        String keyword = Parser.parseFind(commandArgs);
+                        List<Task> matchingTasks = list.find(keyword);
+                        ui.showMatchingTasks(matchingTasks);
                         break;
                     }
                     default:

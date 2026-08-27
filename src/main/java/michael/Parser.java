@@ -81,4 +81,17 @@ public class Parser {
 
         return new Event(description, from, to);
     }
+    /**
+     * Parses the arguments for the find command.
+     *
+     * @param args The input string containing the search keyword.
+     * @return The validated search keyword.
+     * @throws MichaelException If the keyword is empty.
+     */
+    public static String parseFind(String args) throws MichaelException {
+        if (args.isEmpty()) {
+            throw new MichaelException("Please enter a keyword to search for.");
+        }
+        return args;
+    }
 }

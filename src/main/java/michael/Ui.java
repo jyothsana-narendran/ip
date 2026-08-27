@@ -124,4 +124,21 @@ public class Ui {
         System.out.println("Bye. Hope we meet again!");
         System.out.println(DIVIDER);
     }
+    /**
+     * Displays the tasks matching a search keyword.
+     *
+     * @param matchingTasks The list of tasks that match the query.
+     */
+    public void showMatchingTasks(List<Task> matchingTasks) {
+        System.out.println(DIVIDER);
+        if (matchingTasks.isEmpty()) {
+            System.out.println(" No matching tasks found in your list.");
+        } else {
+            System.out.println(" Here are the matching tasks in your list:");
+            for (int i = 0; i < matchingTasks.size(); i++) {
+                System.out.println(" " + (i + 1) + "." + matchingTasks.get(i));
+            }
+        }
+        System.out.println(DIVIDER);
+    }
 }
