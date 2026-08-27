@@ -105,4 +105,19 @@ public class TaskList {
             throw new MichaelException("That task number is not in the list.");
         }
     }
+    /**
+     * Finds and returns a list of tasks that contain the specified keyword in their description.
+     *
+     * @param keyword The substring to search for within task descriptions.
+     * @return A list of tasks matching the keyword.
+     */
+    public List<Task> find(String keyword) {
+        List<Task> matchingTasks = new ArrayList<>();
+        for (Task task : tasks) {
+            if (task.getDescription().contains(keyword)) {
+                matchingTasks.add(task);
+            }
+        }
+        return matchingTasks;
+    }
 }
