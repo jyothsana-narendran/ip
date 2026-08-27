@@ -1,7 +1,10 @@
+package michael;
+
+import task.Task;
 import java.io.IOException;
 
 /**
- * Starts the Michael chatbot application.
+ * Starts the michael.Michael chatbot application.
  */
 public class Michael {
     private final Storage storage;

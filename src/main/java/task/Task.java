@@ -1,3 +1,7 @@
+package task;
+
+import michael.MichaelException;
+
 /**
  * Represents one task that can be marked as done or not done.
  */
