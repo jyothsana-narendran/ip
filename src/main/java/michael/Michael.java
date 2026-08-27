@@ -11,6 +11,12 @@ public class Michael {
     private final Ui ui;
     private TaskList list;
 
+    /**
+     * Initializes the chatbot components and loads previously saved tasks from disk.
+     * If loading fails due to an exception, an empty task list is initialized.
+     *
+     * @param filePath The file path where tasks are saved and loaded from.
+     */
     public Michael(String filePath) {
         ui = new Ui();
         storage = new Storage(filePath);
@@ -22,6 +28,11 @@ public class Michael {
         }
     }
 
+    /**
+     * Runs the main execution loop of the application.
+     * Continually reads commands from the user, executes requested task operations,
+     * updates storage, and outputs status messages until the "bye" command is given.
+     */
     public void run() {
         ui.showWelcome();
 
@@ -94,6 +105,11 @@ public class Michael {
         ui.showGoodbye();
     }
 
+    /**
+     * Main entry point for starting the Michael application.
+     *
+     * @param args Command-line arguments (not used).
+     */
     public static void main(String[] args) {
         new Michael("data/michael.txt").run();
     }
