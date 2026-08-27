@@ -16,6 +16,14 @@ public class Parser {
     private static final DateTimeFormatter DATE_TIME_FORMATTER =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
 
+    /**
+     * Parses a string representation of a task index into a 0-based integer index.
+     *
+     * @param args The input string containing the 1-based task number.
+     * @param commandName The name of the command invoking this parser, used for error messages.
+     * @return The 0-based index of the task.
+     * @throws MichaelException If {@code args} is empty or cannot be parsed as an integer.
+     */
     public static int parseTaskIndex(String args, String commandName) throws MichaelException {
         if (args.isEmpty()) {
             throw new MichaelException("Please provide a task number after " + commandName + ".");
@@ -27,6 +35,13 @@ public class Parser {
         }
     }
 
+    /**
+     * Parses arguments to construct a {@link Todo} task.
+     *
+     * @param args The input string containing the description of the todo.
+     * @return A new {@code Todo} task with the specified description.
+     * @throws MichaelException If the description is empty.
+     */
     public static Todo parseTodo(String args) throws MichaelException {
         if (args.isEmpty()) {
             throw new MichaelException("The description of a todo cannot be empty.");
@@ -34,6 +49,15 @@ public class Parser {
         return new Todo(args);
     }
 
+    /**
+     * Parses arguments to construct a {@link Deadline} task.
+     * Expects a description followed by the {@code /by} flag and a date-time string in "yyyy-MM-dd HHmm" format.
+     *
+     * @param args The input string containing the description and deadline date-time.
+     * @return A new {@code Deadline} task with the specified description and date-time.
+     * @throws MichaelException If the {@code /by} flag is missing, description/date is empty,
+     *                          or the date string does not match the expected pattern.
+     */
     public static Deadline parseDeadline(String args) throws MichaelException {
         int byIndex = args.indexOf("/by");
         if (byIndex == -1) {
@@ -60,6 +84,14 @@ public class Parser {
         }
     }
 
+    /**
+     * Parses arguments to construct an {@link Event} task.
+     * Expects a description followed by {@code /from} and {@code /to} flags specifying the duration.
+     *
+     * @param args The input string containing the description, start time, and end time.
+     * @return A new {@code Event} task with the specified description, start time, and end time.
+     * @throws MichaelException If either flag is missing, ordered incorrectly, or if any component is empty.
+     */
     public static Event parseEvent(String args) throws MichaelException {
         int fromIndex = args.indexOf("/from");
         int toIndex = args.indexOf("/to");
