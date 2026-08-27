@@ -1,3 +1,8 @@
+package task;
+
+import michael.MichaelException;
+import task.Task;
+
 /**
  * Represents a task that happens between a start and end time.
  */

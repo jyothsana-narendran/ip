@@ -1,5 +1,7 @@
+package michael;
+
 /**
- * Represents an error caused by an invalid Michael command.
+ * Represents an error caused by an invalid michael.Michael command.
  */
 public class MichaelException extends Exception {
     /**

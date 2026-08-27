@@ -1,9 +1,12 @@
-import java.util.ArrayList;
+package michael;
+
+import task.Task;
+
 import java.util.List;
 import java.util.Scanner;
 
 /**
- * Handles interactions between Michael and the user.
+ * Handles interactions between michael.Michael and the user.
  */
 public class Ui {
     /** The divider used to separate chatbot messages. */
@@ -19,10 +22,10 @@ public class Ui {
         input = new Scanner(System.in);
     }
 
-    /** Displays Michael's welcome message. */
+    /** Displays michael.Michael's welcome message. */
     public void showWelcome() {
         System.out.println(DIVIDER);
-        System.out.println("Hello! I'm Michael :)");
+        System.out.println("Hello! I'm michael.Michael :)");
         System.out.println("How may I help you?");
         System.out.println(DIVIDER);
     }
@@ -100,7 +103,7 @@ public class Ui {
     }
 
     /**
-     * Displays an error message using Michael's standard message border.
+     * Displays an error message using michael.Michael's standard message border.
      *
      * @param message the error explanation
      */
@@ -115,7 +118,7 @@ public class Ui {
         showError("I could not load your saved tasks: " + message);
     }
 
-    /** Displays Michael's farewell message. */
+    /** Displays michael.Michael's farewell message. */
     public void showGoodbye() {
         System.out.println(DIVIDER);
         System.out.println("Bye. Hope we meet again!");

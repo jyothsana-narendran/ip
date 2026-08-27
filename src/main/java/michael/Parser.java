@@ -1,3 +1,9 @@
+package michael;
+
+import task.Deadline;
+import task.Todo;
+import task.Event;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -17,7 +23,7 @@ public class Parser {
         try {
             return Integer.parseInt(args) - 1;
         } catch (NumberFormatException e) {
-            throw new MichaelException("Task numbers must be whole numbers.");
+            throw new MichaelException("task.Task numbers must be whole numbers.");
         }
     }
 

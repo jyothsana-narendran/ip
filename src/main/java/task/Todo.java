@@ -1,3 +1,7 @@
+package task;
+
+import michael.MichaelException;
+
 /**
  * Represents a task without a deadline or event time.
  */
