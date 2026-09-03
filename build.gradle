@@ -13,7 +13,18 @@ repositories {
     mavenCentral()
 }
 
+sourceSets {
+    main {
+        resources {
+            srcDirs = ['src/main/resources', 'src/main/images']
+        }
+    }
+}
+
 dependencies {
+    implementation 'org.openjfx:javafx-controls:25'
+    implementation 'org.openjfx:javafx-fxml:25'
+
     String jUnitVersion = '5.14.4'
 
     testImplementation "org.junit.jupiter:junit-jupiter-api:${jUnitVersion}"
@@ -37,7 +48,7 @@ test {
 }
 
 application {
-    mainClass = 'michael.Michael'
+    mainClass = 'michael.Main'
 }
 
 jar {
