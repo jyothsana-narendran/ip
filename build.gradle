@@ -13,6 +13,14 @@ repositories {
     mavenCentral()
 }
 
+sourceSets {
+    main {
+        resources {
+            srcDirs = ['src/main/resources', 'src/main/images']
+        }
+    }
+}
+
 dependencies {
     implementation 'org.openjfx:javafx-controls:25'
 

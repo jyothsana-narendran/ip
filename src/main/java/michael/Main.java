@@ -15,13 +15,16 @@ import javafx.stage.Stage;
 /** JavaFX entry point for Michael's chat-style user interface. */
 public class Main extends Application {
     private final Michael michael = new Michael("data/michael.txt");
-    private final Image michaelPicture = new Image("https://raw.githubusercontent.com/nus-cs2103-AY1920S1/website/master/images/logo.png");
+    private Image michaelPicture;
+    private Image userPicture;
     private ScrollPane scrollPane;
     private VBox dialogContainer;
     private TextField userInput;
 
     @Override
     public void start(Stage stage) {
+        michaelPicture = loadAvatar("michael.png");
+        userPicture = loadAvatar("user.png");
         scrollPane = new ScrollPane();
         dialogContainer = new VBox(10);
         dialogContainer.setPadding(new Insets(12, 8, 12, 8));
@@ -84,11 +87,16 @@ public class Main extends Application {
     }
 
     private void addUserMessage(String message) {
-        dialogContainer.getChildren().add(new DialogBox(message, michaelPicture, true));
+        dialogContainer.getChildren().add(new DialogBox(message, userPicture, true));
     }
 
     private void addMichaelMessage(String message) {
         dialogContainer.getChildren().add(new DialogBox(message, michaelPicture, false));
         scrollPane.setVvalue(1.0);
+    }
+
+    /** Loads an avatar from the application's bundled image resources. */
+    private Image loadAvatar(String fileName) {
+        return new Image(getClass().getResourceAsStream("/" + fileName));
     }
 }
