@@ -112,6 +112,60 @@ public class Michael {
         ui.showGoodbye();
     }
 
+    /** Executes one user command and returns the message shown in the GUI. */
+    public String processCommand(String command) {
+        String[] parts = command.trim().split(" ", 2);
+        String commandWord = parts[0];
+        String commandArgs = parts.length > 1 ? parts[1].trim() : "";
+        try {
+            switch (commandWord) {
+                case "list":
+                    if (list.getTasks().isEmpty()) return "Your task list is empty.";
+                    StringBuilder result = new StringBuilder("Here are your tasks:\n");
+                    for (int i = 0; i < list.getTasks().size(); i++) {
+                        result.append(i + 1).append(". ").append(list.getTasks().get(i)).append('\n');
+                    }
+                    return result.toString().trim();
+                case "mark":
+                    Task marked = list.mark(Parser.parseTaskIndex(commandArgs, "mark"));
+                    storage.save(list);
+                    return "Marked as done:\n" + marked;
+                case "unmark":
+                    Task unmarked = list.unmark(Parser.parseTaskIndex(commandArgs, "unmark"));
+                    storage.save(list);
+                    return "Marked as not done:\n" + unmarked;
+                case "delete":
+                    Task deleted = list.delete(Parser.parseTaskIndex(commandArgs, "delete"));
+                    storage.save(list);
+                    return "Deleted:\n" + deleted;
+                case "todo":
+                    Task todo = Parser.parseTodo(commandArgs);
+                    list.add(todo);
+                    storage.save(list);
+                    return "Added:\n" + todo;
+                case "deadline":
+                    Task deadline = Parser.parseDeadline(commandArgs);
+                    list.add(deadline);
+                    storage.save(list);
+                    return "Added:\n" + deadline;
+                case "event":
+                    Task event = Parser.parseEvent(commandArgs);
+                    list.add(event);
+                    storage.save(list);
+                    return "Added:\n" + event;
+                case "find":
+                    List<Task> matches = list.find(Parser.parseFind(commandArgs));
+                    return matches.isEmpty() ? "No matching tasks found." : matches.toString();
+                case "bye":
+                    return "Bye. Hope we meet again!";
+                default:
+                    throw new MichaelException("Sorry, I don't know what that means.");
+            }
+        } catch (MichaelException | IOException e) {
+            return e.getMessage();
+        }
+    }
+
     /**
      * Main entry point for starting the Michael application.
      *
