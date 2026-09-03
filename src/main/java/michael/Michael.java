@@ -166,6 +166,11 @@ public class Michael {
         }
     }
 
+    /** Generates a response for a user's chat message. */
+    public String getResponse(String input) {
+        return processCommand(input);
+    }
+
     /**
      * Main entry point for starting the Michael application.
      *

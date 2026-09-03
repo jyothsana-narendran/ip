@@ -23,6 +23,7 @@ sourceSets {
 
 dependencies {
     implementation 'org.openjfx:javafx-controls:25'
+    implementation 'org.openjfx:javafx-fxml:25'
 
     String jUnitVersion = '5.14.4'
 
