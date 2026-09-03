@@ -35,8 +35,6 @@ public class Main extends Application {
         userInput = new TextField();
         userInput.setPromptText("Enter a command, e.g. todo read a book");
         Button sendButton = new Button("Send");
-        sendButton.setOnAction(event -> sendMessage());
-        userInput.setOnAction(event -> sendMessage());
 
         AnchorPane mainLayout = new AnchorPane(scrollPane, userInput, sendButton);
         AnchorPane.setTopAnchor(scrollPane, 0.0);
@@ -74,10 +72,21 @@ public class Main extends Application {
         Scene scene = new Scene(mainLayout, 400, 600);
         stage.setScene(scene);
         stage.show();
-        addMichaelMessage("Hello! I'm Michael. How may I help you?");
+        addMichaelMessage("Hi! I'm Michael. How may I help you?");
+
+        // Handle both clicking Send and pressing Enter in the input field.
+        sendButton.setOnMouseClicked(event -> handleUserInput());
+        userInput.setOnAction(event -> handleUserInput());
+
+        // Keep the newest message visible whenever the conversation grows.
+        dialogContainer.heightProperty().addListener(observable -> scrollPane.setVvalue(1.0));
     }
 
-    private void sendMessage() {
+    /**
+     * Creates a user dialog, processes the command, and displays Michael's reply.
+     * The input field is cleared after the command is captured.
+     */
+    private void handleUserInput() {
         String command = userInput.getText().trim();
         if (command.isEmpty()) return;
         addUserMessage(command);
