@@ -14,18 +14,25 @@ public class DialogBox extends HBox {
     /** Creates a message bubble.
      * @param message message to display
      * @param picture image representing the sender
+     * @param fromUser whether the message was sent by the user
      */
-    public DialogBox(String message, Image picture) {
+    public DialogBox(String message, Image picture, boolean fromUser) {
         text = new Label(message);
         text.setWrapText(true);
-        text.setMaxWidth(520);
+        text.setMaxWidth(300);
+        text.setStyle("-fx-font-size: 14px; -fx-padding: 8px;");
         displayPicture = new ImageView(picture);
         displayPicture.setFitWidth(40);
         displayPicture.setFitHeight(40);
         displayPicture.setPreserveRatio(true);
-        setAlignment(Pos.CENTER_LEFT);
+        setAlignment(fromUser ? Pos.CENTER_RIGHT : Pos.CENTER_LEFT);
         setSpacing(10);
-        getChildren().addAll(displayPicture, text);
-        getStyleClass().add("dialog-box");
+        if (fromUser) {
+            getChildren().addAll(text, displayPicture);
+        } else {
+            getChildren().addAll(displayPicture, text);
+        }
+        setMaxWidth(Double.MAX_VALUE);
+        getStyleClass().add(fromUser ? "user-dialog" : "michael-dialog");
     }
 }

@@ -24,7 +24,8 @@ public class Main extends Application {
     public void start(Stage stage) {
         scrollPane = new ScrollPane();
         dialogContainer = new VBox(10);
-        dialogContainer.setPadding(new Insets(12));
+        dialogContainer.setPadding(new Insets(12, 8, 12, 8));
+        dialogContainer.setFillWidth(true);
         scrollPane.setContent(dialogContainer);
         scrollPane.setFitToWidth(true);
 
@@ -59,9 +60,12 @@ public class Main extends Application {
         userInput.setPrefWidth(325.0);
         sendButton.setPrefWidth(55.0);
         AnchorPane.setTopAnchor(scrollPane, 1.0);
+        AnchorPane.setLeftAnchor(scrollPane, 1.0);
+        AnchorPane.setRightAnchor(scrollPane, 15.0);
         AnchorPane.setBottomAnchor(sendButton, 1.0);
         AnchorPane.setRightAnchor(sendButton, 1.0);
         AnchorPane.setLeftAnchor(userInput, 1.0);
+        AnchorPane.setRightAnchor(userInput, 56.0);
         AnchorPane.setBottomAnchor(userInput, 1.0);
 
         Scene scene = new Scene(mainLayout, 400, 600);
@@ -80,11 +84,11 @@ public class Main extends Application {
     }
 
     private void addUserMessage(String message) {
-        dialogContainer.getChildren().add(new DialogBox(message, michaelPicture));
+        dialogContainer.getChildren().add(new DialogBox(message, michaelPicture, true));
     }
 
     private void addMichaelMessage(String message) {
-        dialogContainer.getChildren().add(new DialogBox(message, michaelPicture));
+        dialogContainer.getChildren().add(new DialogBox(message, michaelPicture, false));
         scrollPane.setVvalue(1.0);
     }
 }
