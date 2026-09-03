@@ -30,6 +30,7 @@ public class DialogBox extends HBox {
         }
         dialog.setText(text);
         displayPicture.setImage(image);
+        setMaxWidth(Double.MAX_VALUE);
     }
 
     /** Flips the dialog so that the speaker image is on the right. */
@@ -40,15 +41,16 @@ public class DialogBox extends HBox {
         setAlignment(Pos.TOP_LEFT);
     }
 
-    /** Creates a dialog for a user message. */
+    /** Creates a flipped dialog for a user message. */
     public static DialogBox getUserDialog(String text, Image image) {
-        return new DialogBox(text, image);
-    }
-
-    /** Creates a flipped dialog for a Michael message. */
-    public static DialogBox getMichaelDialog(String text, Image image) {
         DialogBox dialogBox = new DialogBox(text, image);
         dialogBox.flip();
+        dialogBox.setAlignment(Pos.TOP_RIGHT);
         return dialogBox;
+    }
+
+    /** Creates a dialog for a Michael message. */
+    public static DialogBox getMichaelDialog(String text, Image image) {
+        return new DialogBox(text, image);
     }
 }
