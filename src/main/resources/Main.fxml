@@ -4,7 +4,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
-<AnchorPane prefHeight="600.0" prefWidth="400.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="michael.MainController">
+<AnchorPane prefHeight="600.0" prefWidth="400.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="michael.MainWindow">
     <ScrollPane fx:id="scrollPane" prefHeight="535.0" prefWidth="385.0" hbarPolicy="NEVER" vbarPolicy="ALWAYS" fitToWidth="true" AnchorPane.topAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="15.0" AnchorPane.bottomAnchor="50.0">
         <content><VBox fx:id="dialogContainer" fillWidth="true" /></content>
     </ScrollPane>
