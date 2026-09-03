@@ -1,60 +1,53 @@
 package michael;
 
-import javafx.geometry.Pos;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.Node;
 
-/** A single chat message containing text and the sender's picture. */
+import java.io.IOException;
+import java.util.Collections;
+
+/** A reusable dialog box containing a speaker image and message text. */
 public class DialogBox extends HBox {
-    private final Label text;
-    private final ImageView displayPicture;
+    @FXML private Label dialog;
+    @FXML private ImageView displayPicture;
 
-    /** Creates a message bubble.
-     * @param message message to display
-     * @param picture image representing the sender
-     * @param fromUser whether the message was sent by the user
-     */
-    public DialogBox(String message, Image picture, boolean fromUser) {
-        text = new Label(message);
-        text.setWrapText(true);
-        text.setMaxWidth(300);
-        text.setStyle("-fx-font-size: 14px; -fx-padding: 8px;");
-        displayPicture = new ImageView(picture);
-        displayPicture.setFitWidth(40);
-        displayPicture.setFitHeight(40);
-        displayPicture.setPreserveRatio(true);
-        setAlignment(fromUser ? Pos.CENTER_RIGHT : Pos.CENTER_LEFT);
-        setSpacing(10);
-        if (fromUser) {
-            getChildren().addAll(text, displayPicture);
-        } else {
-            getChildren().addAll(displayPicture, text);
+    private DialogBox(String text, Image image) {
+        try {
+            FXMLLoader loader = new FXMLLoader(MainWindow.class.getResource("/view/DialogBox.fxml"));
+            loader.setController(this);
+            loader.setRoot(this);
+            loader.load();
+        } catch (IOException e) {
+            throw new IllegalStateException("Unable to load DialogBox.fxml", e);
         }
-        setMaxWidth(Double.MAX_VALUE);
-        getStyleClass().add(fromUser ? "user-dialog" : "michael-dialog");
+        dialog.setText(text);
+        displayPicture.setImage(image);
     }
 
-    /** Flips the dialog so that its image is on the right. */
+    /** Flips the dialog so that the speaker image is on the right. */
     private void flip() {
-        setAlignment(Pos.TOP_LEFT);
         ObservableList<Node> children = FXCollections.observableArrayList(getChildren());
-        FXCollections.reverse(children);
+        Collections.reverse(children);
         getChildren().setAll(children);
+        setAlignment(Pos.TOP_LEFT);
     }
 
     /** Creates a dialog for a user message. */
-    public static DialogBox getUserDialog(String message, Image picture) {
-        return new DialogBox(message, picture, true);
+    public static DialogBox getUserDialog(String text, Image image) {
+        return new DialogBox(text, image);
     }
 
     /** Creates a flipped dialog for a Michael message. */
-    public static DialogBox getMichaelDialog(String message, Image picture) {
-        DialogBox dialogBox = new DialogBox(message, picture, false);
+    public static DialogBox getMichaelDialog(String text, Image image) {
+        DialogBox dialogBox = new DialogBox(text, image);
         dialogBox.flip();
         return dialogBox;
     }
