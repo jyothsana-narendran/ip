@@ -11,6 +11,7 @@ public class Deadline extends Task {
 
     public Deadline(String description, LocalDateTime by) throws MichaelException {
         super(description, "deadline");
+        assert by != null : "A deadline must have a date and time";
         this.by = by;
     }
 

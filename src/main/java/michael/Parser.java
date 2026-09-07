@@ -64,6 +64,9 @@ public class Parser {
             throw new MichaelException("Please include a deadline using /by.");
         }
 
+        assert byIndex >= 0 && byIndex + 3 <= args.length()
+                : "The /by marker must identify a valid substring boundary";
+
         String description = args.substring(0, byIndex).trim();
         String by = args.substring(byIndex + 3).trim();
 
@@ -99,6 +102,10 @@ public class Parser {
         if (fromIndex == -1 || toIndex == -1 || toIndex <= fromIndex) {
             throw new MichaelException("Please include an event time using /from and /to.");
         }
+
+        assert fromIndex >= 0 && toIndex > fromIndex && fromIndex + 5 <= toIndex
+                && toIndex + 3 <= args.length()
+                : "Event markers must identify valid, ordered substring boundaries";
 
         String description = args.substring(0, fromIndex).trim();
         String from = args.substring(fromIndex + 5, toIndex).trim();

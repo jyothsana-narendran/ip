@@ -104,6 +104,8 @@ public class TaskList {
         if (index < 0 || index >= tasks.size()) {
             throw new MichaelException("That task number is not in the list.");
         }
+        assert index >= 0 && index < tasks.size()
+                : "A validated task index must be within the list bounds";
     }
     /**
      * Finds and returns a list of tasks that contain the specified keyword in their description.

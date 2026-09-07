@@ -20,6 +20,7 @@ public class Task {
      * @throws MichaelException if the task description is empty
      */
     protected Task(String description, String taskType) throws MichaelException {
+        assert taskType != null && !taskType.isBlank() : "Task type is required for validation messages";
         if (description == null || description.isBlank()) {
             String article = taskType.equals("event") ? "an" : "a";
             throw new MichaelException(" Oh No! The description of " + article + " "
@@ -27,6 +28,8 @@ public class Task {
         }
         this.description = description;
         this.isDone = false;
+        assert this.description != null && !this.description.isBlank()
+                : "A successfully constructed task must have a description";
     }
 
     /**
