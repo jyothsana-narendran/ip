@@ -13,6 +13,7 @@ public class Michael {
     private final Storage storage;
     private final Ui ui;
     private TaskList list;
+    private TaskList previousState;
 
     /**
      * Initializes the chatbot components and loads previously saved tasks from disk.
@@ -51,49 +52,64 @@ public class Michael {
 
             try {
                 switch (commandWord) {
+                    case "undo":
+                        undo();
+                        break;
                     case "list":
                         ui.showTaskList(list.getTasks());
                         break;
 
                     case "mark": {
+                        TaskList state = list.snapshot();
                         int index = Parser.parseTaskIndex(commandArgs, "mark");
                         Task task = list.mark(index);
                         storage.save(list);
+                        previousState = state;
                         ui.showTaskMarked(task);
                         break;
                     }
                     case "unmark": {
+                        TaskList state = list.snapshot();
                         int index = Parser.parseTaskIndex(commandArgs, "unmark");
                         Task task = list.unmark(index);
                         storage.save(list);
+                        previousState = state;
                         ui.showTaskUnmarked(task);
                         break;
                     }
                     case "delete": {
+                        TaskList state = list.snapshot();
                         int index = Parser.parseTaskIndex(commandArgs, "delete");
                         Task deletedTask = list.delete(index);
                         storage.save(list);
+                        previousState = state;
                         ui.showTaskDeleted(deletedTask, list.size());
                         break;
                     }
                     case "todo": {
+                        TaskList state = list.snapshot();
                         Task task = Parser.parseTodo(commandArgs);
                         list.add(task);
                         storage.save(list);
+                        previousState = state;
                         ui.showTaskAdded(task, list.size());
                         break;
                     }
                     case "deadline": {
+                        TaskList state = list.snapshot();
                         Task task = Parser.parseDeadline(commandArgs);
                         list.add(task);
                         storage.save(list);
+                        previousState = state;
                         ui.showTaskAdded(task, list.size());
                         break;
                     }
                     case "event": {
+                        TaskList state = list.snapshot();
                         Task task = Parser.parseEvent(commandArgs);
                         list.add(task);
                         storage.save(list);
+                        previousState = state;
                         ui.showTaskAdded(task, list.size());
                         break;
                     }
@@ -132,32 +148,46 @@ public class Michael {
                         result.append(i + 1).append(". ").append(list.getTasks().get(i)).append('\n');
                     }
                     return result.toString().trim();
+                case "undo":
+                    return undo();
                 case "mark":
+                    TaskList markState = list.snapshot();
                     Task marked = list.mark(Parser.parseTaskIndex(commandArgs, "mark"));
                     storage.save(list);
+                    previousState = markState;
                     return "Marked as done:\n" + marked;
                 case "unmark":
+                    TaskList unmarkState = list.snapshot();
                     Task unmarked = list.unmark(Parser.parseTaskIndex(commandArgs, "unmark"));
                     storage.save(list);
+                    previousState = unmarkState;
                     return "Marked as not done:\n" + unmarked;
                 case "delete":
+                    TaskList deleteState = list.snapshot();
                     Task deleted = list.delete(Parser.parseTaskIndex(commandArgs, "delete"));
                     storage.save(list);
+                    previousState = deleteState;
                     return "Deleted:\n" + deleted;
                 case "todo":
+                    TaskList todoState = list.snapshot();
                     Task todo = Parser.parseTodo(commandArgs);
                     list.add(todo);
                     storage.save(list);
+                    previousState = todoState;
                     return "Added:\n" + todo;
                 case "deadline":
+                    TaskList deadlineState = list.snapshot();
                     Task deadline = Parser.parseDeadline(commandArgs);
                     list.add(deadline);
                     storage.save(list);
+                    previousState = deadlineState;
                     return "Added:\n" + deadline;
                 case "event":
+                    TaskList eventState = list.snapshot();
                     Task event = Parser.parseEvent(commandArgs);
                     list.add(event);
                     storage.save(list);
+                    previousState = eventState;
                     return "Added:\n" + event;
                 case "find":
                     List<Task> matches = list.find(Parser.parseFind(commandArgs));
@@ -175,6 +205,17 @@ public class Michael {
     /** Generates a response for a user's chat message. */
     public String getResponse(String input) {
         return processCommand(input);
+    }
+
+    /** Restores the state before the most recent successful mutation. */
+    private String undo() throws MichaelException, IOException {
+        if (previousState == null) {
+            return "There is nothing to undo.";
+        }
+        list = previousState;
+        storage.save(list);
+        previousState = null;
+        return "Undid the last command.";
     }
 
     /**

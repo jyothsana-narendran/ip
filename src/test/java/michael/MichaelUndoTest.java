@@ -1,0 +1,29 @@
+package michael;
+
+import org.junit.jupiter.api.Test;
+
+import java.nio.file.Files;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class MichaelUndoTest {
+
+    @Test
+    void undoRestoresTheStateBeforeTheMostRecentMutation() throws Exception {
+        Michael michael = new Michael(Files.createTempFile("michael-undo-", ".txt").toString());
+
+        michael.processCommand("todo buy milk");
+        assertEquals("Undid the last command.", michael.processCommand("undo"));
+        assertEquals("Your task list is empty.", michael.processCommand("list"));
+        assertEquals("There is nothing to undo.", michael.processCommand("undo"));
+    }
+
+    @Test
+    void readOnlyCommandsDoNotConsumeUndo() throws Exception {
+        Michael michael = new Michael(Files.createTempFile("michael-undo-", ".txt").toString());
+
+        michael.processCommand("todo buy milk");
+        michael.processCommand("list");
+        assertEquals("Undid the last command.", michael.processCommand("undo"));
+    }
+}

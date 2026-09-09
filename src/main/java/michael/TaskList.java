@@ -1,6 +1,9 @@
 package michael;
 
 import task.Task;
+import task.Deadline;
+import task.Event;
+import task.Todo;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,6 +29,33 @@ public class TaskList {
      */
     public TaskList(List<Task> tasks) {
         this.tasks = new ArrayList<>(tasks);
+    }
+
+    /**
+     * Creates an independent copy of this list, including each task's completion state.
+     *
+     * @return a snapshot that can safely be used to restore this list later
+     * @throws MichaelException if a task cannot be copied
+     */
+    public TaskList snapshot() throws MichaelException {
+        List<Task> copiedTasks = new ArrayList<>();
+        for (Task task : tasks) {
+            Task copy;
+            if (task instanceof Deadline deadline) {
+                copy = new Deadline(deadline.getDescription(), deadline.getBy());
+            } else if (task instanceof Event event) {
+                copy = new Event(event.getDescription(), event.getFrom(), event.getTo());
+            } else if (task instanceof Todo) {
+                copy = new Todo(task.getDescription());
+            } else {
+                throw new MichaelException("Unable to create an undo snapshot.");
+            }
+            if (task.getStatusIcon().equals("X")) {
+                copy.markAsDone();
+            }
+            copiedTasks.add(copy);
+        }
+        return new TaskList(copiedTasks);
     }
 
     /**
