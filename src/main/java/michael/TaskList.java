@@ -3,6 +3,7 @@ package michael;
 import task.Task;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -77,9 +78,11 @@ public class TaskList {
     }
 
     /**
-     * Returns the underlying list of tasks.
+     * Retrieves the task at the specified index without removing it.
      *
-     * @return A {@code List} containing all tasks.
+     * @param index The zero-based index of the task to retrieve.
+     * @return The task at the specified index.
+     * @throws MichaelException If the specified index is out of bounds.
      */
     public Task get(int index) throws MichaelException {
         validateIndex(index);
@@ -90,8 +93,13 @@ public class TaskList {
         return tasks.size();
     }
 
+    /**
+     * Returns a read-only view of the tasks.
+     *
+     * @return an unmodifiable list containing all tasks
+     */
     public List<Task> getTasks() {
-        return tasks;
+        return Collections.unmodifiableList(tasks);
     }
 
     /**
@@ -112,12 +120,8 @@ public class TaskList {
      * @return A list of tasks matching the keyword.
      */
     public List<Task> find(String keyword) {
-        List<Task> matchingTasks = new ArrayList<>();
-        for (Task task : tasks) {
-            if (task.getDescription().contains(keyword)) {
-                matchingTasks.add(task);
-            }
-        }
-        return matchingTasks;
+        return tasks.stream()
+                .filter(task -> task.getDescription().contains(keyword))
+                .toList();
     }
 }
