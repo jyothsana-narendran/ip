@@ -11,7 +11,11 @@ import java.time.format.DateTimeParseException;
 /**
  * Handles parsing and validation of user commands and parameters.
  */
-public class Parser {
+public final class Parser {
+
+    private Parser() {
+        // Utility class; do not instantiate.
+    }
 
     private static final DateTimeFormatter DATE_TIME_FORMATTER =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
@@ -29,9 +33,13 @@ public class Parser {
             throw new MichaelException("Please provide a task number after " + commandName + ".");
         }
         try {
-            return Integer.parseInt(args) - 1;
+            int index = Integer.parseInt(args) - 1;
+            if (index < 0) {
+                throw new MichaelException("Task numbers must be positive.");
+            }
+            return index;
         } catch (NumberFormatException e) {
-            throw new MichaelException("task.Task numbers must be whole numbers.");
+            throw new MichaelException("Task numbers must be whole numbers.");
         }
     }
 
