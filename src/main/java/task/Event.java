@@ -22,6 +22,8 @@ public class Event extends Task {
      */
     public Event(String description, String from, String to) throws MichaelException {
         super(description, "event");
+        assert from != null && !from.isBlank() : "An event must have a start time";
+        assert to != null && !to.isBlank() : "An event must have an end time";
         this.from = from;
         this.to = to;
     }
