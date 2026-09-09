@@ -42,7 +42,8 @@ public class Storage {
         Path temporaryFile = Files.createTempFile(tempDir, "michael-", ".tmp");
 
         try {
-            Files.write(temporaryFile, taskList.getTasks().stream().map(this::formatTask).toList());
+            Files.write(temporaryFile, taskList.getTasks().stream().map(this::formatTask).toList(),
+                    StandardCharsets.UTF_8);
             Files.move(temporaryFile, filePath, StandardCopyOption.REPLACE_EXISTING,
                     StandardCopyOption.ATOMIC_MOVE);
         } catch (java.nio.file.AtomicMoveNotSupportedException e) {
@@ -65,7 +66,7 @@ public class Storage {
         }
 
         List<Task> tasks = new ArrayList<>();
-        List<String> lines = Files.readAllLines(filePath);
+        List<String> lines = Files.readAllLines(filePath, StandardCharsets.UTF_8);
         for (int i = 0; i < lines.size(); i++) {
             try {
                 tasks.add(createTask(lines.get(i)));

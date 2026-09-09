@@ -8,6 +8,8 @@ import java.util.List;
  * Starts the michael.Michael chatbot application.
  */
 public class Michael {
+    private static final String EMPTY_COMMAND = "Please enter a command.";
+
     private final Storage storage;
     private final Ui ui;
     private TaskList list;
@@ -114,7 +116,11 @@ public class Michael {
 
     /** Executes one user command and returns the message shown in the GUI. */
     public String processCommand(String command) {
-        String[] parts = command.trim().split(" ", 2);
+        if (command == null || command.isBlank()) {
+            return EMPTY_COMMAND;
+        }
+
+        String[] parts = command.trim().split("\\s+", 2);
         String commandWord = parts[0];
         String commandArgs = parts.length > 1 ? parts[1].trim() : "";
         try {

@@ -7,10 +7,10 @@ import michael.MichaelException;
  */
 public class Event extends Task {
     /** The event start time. */
-    protected String from;
+    private final String from;
 
     /** The event end time. */
-    protected String to;
+    private final String to;
 
     /**
      * Creates an incomplete event task.
