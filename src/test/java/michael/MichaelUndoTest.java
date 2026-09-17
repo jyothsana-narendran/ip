@@ -14,7 +14,7 @@ class MichaelUndoTest {
 
         michael.processCommand("todo buy milk");
         assertEquals("Undid the last command.", michael.processCommand("undo"));
-        assertEquals("Your task list is empty.", michael.processCommand("list"));
+        assertEquals("🌑 Your task orbit is empty.", michael.processCommand("list"));
         assertEquals("There is nothing to undo.", michael.processCommand("undo"));
     }
 
