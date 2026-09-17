@@ -1,5 +1,6 @@
 package michael;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.ScrollPane;
@@ -26,7 +27,9 @@ public class MainWindow extends AnchorPane {
     public void initialize() {
         getStylesheets().add(MainWindow.class.getResource("/view/space-theme.css").toExternalForm());
         dialogContainer.setPadding(new Insets(12, 8, 12, 8));
-        scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
+        // Scroll after the container grows, once JavaFX has recalculated its layout.
+        dialogContainer.heightProperty().addListener((observable, oldHeight, newHeight) ->
+                scrollToLatestMessage());
         addMichaelMessage("🌌 Welcome to Mission Control — your space-themed task management app.\n\nHere, your tasks are missions: launch one with todo, deadline, or event, then track them as they orbit your task list. What mission shall we plan?");
     }
 
@@ -47,11 +50,21 @@ public class MainWindow extends AnchorPane {
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input, userImage),
                 responseDialog);
+        scrollToLatestMessage();
         userInput.clear();
     }
 
     private void addMichaelMessage(String message) {
         dialogContainer.getChildren().add(
                 DialogBox.getMichaelDialog(message, michaelImage));
+        scrollToLatestMessage();
+    }
+
+    /** Scrolls after layout so the newest message is fully visible. */
+    private void scrollToLatestMessage() {
+        Platform.runLater(() -> {
+            scrollPane.layout();
+            scrollPane.setVvalue(scrollPane.getVmax());
+        });
     }
 }
