@@ -9,6 +9,7 @@ import java.util.List;
  */
 public class Michael {
     private static final String EMPTY_COMMAND = "Please enter a command.";
+    private boolean lastResponseWasError;
 
     private final Storage storage;
     private final Ui ui;
@@ -132,7 +133,9 @@ public class Michael {
 
     /** Executes one user command and returns the message shown in the GUI. */
     public String processCommand(String command) {
+        lastResponseWasError = false;
         if (command == null || command.isBlank()) {
+            lastResponseWasError = true;
             return EMPTY_COMMAND;
         }
 
@@ -198,8 +201,14 @@ public class Michael {
                     throw new MichaelException("Sorry, I don't know what that means.");
             }
         } catch (MichaelException | IOException e) {
+            lastResponseWasError = true;
             return e.getMessage();
         }
+    }
+
+    /** Returns whether the most recently processed command produced an error. */
+    public boolean wasLastResponseError() {
+        return lastResponseWasError;
     }
 
     /** Generates a response for a user's chat message. */

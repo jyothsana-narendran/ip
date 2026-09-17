@@ -53,4 +53,20 @@ public class DialogBox extends HBox {
     public static DialogBox getMichaelDialog(String text, Image image) {
         return new DialogBox(text, image);
     }
+
+    /** Creates a visually prominent dialog for an invalid command or input. */
+    public static DialogBox getErrorDialog(String text, Image image) {
+        DialogBox dialogBox = new DialogBox("⚠ " + text, image);
+        dialogBox.dialog.setStyle(
+                "-fx-font-size: 14px;"
+                        + " -fx-padding: 8px;"
+                        + " -fx-font-weight: bold;"
+                        + " -fx-text-fill: #8b0000;"
+                        + " -fx-background-color: #ffe1e1;"
+                        + " -fx-border-color: #d32f2f;"
+                        + " -fx-border-width: 2px;"
+                        + " -fx-border-radius: 5px;"
+                        + " -fx-background-radius: 5px;");
+        return dialogBox;
+    }
 }

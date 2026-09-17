@@ -40,9 +40,12 @@ public class MainWindow extends AnchorPane {
         String input = userInput.getText().trim();
         if (input.isEmpty()) return;
         String response = michael.getResponse(input);
+        DialogBox responseDialog = michael.wasLastResponseError()
+                ? DialogBox.getErrorDialog(response, michaelImage)
+                : DialogBox.getMichaelDialog(response, michaelImage);
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input, userImage),
-                DialogBox.getMichaelDialog(response, michaelImage));
+                responseDialog);
         userInput.clear();
     }
 
