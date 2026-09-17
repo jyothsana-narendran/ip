@@ -25,8 +25,8 @@ public class Ui {
     /** Displays michael.Michael's welcome message. */
     public void showWelcome() {
         System.out.println(DIVIDER);
-        System.out.println("Hello! I'm michael.Michael :)");
-        System.out.println("How may I help you?");
+        System.out.println("🌌 Welcome to Mission Control — your space-themed task management app.");
+        System.out.println("Here, your tasks are missions. How shall we plan your next launch?");
         System.out.println(DIVIDER);
     }
 

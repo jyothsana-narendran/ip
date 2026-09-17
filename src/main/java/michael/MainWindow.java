@@ -24,9 +24,10 @@ public class MainWindow extends AnchorPane {
 
     @FXML
     public void initialize() {
+        getStylesheets().add(MainWindow.class.getResource("/view/space-theme.css").toExternalForm());
         dialogContainer.setPadding(new Insets(12, 8, 12, 8));
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
-        addMichaelMessage("Hi! I'm Michael. How may I help you?");
+        addMichaelMessage("🌌 Welcome to Mission Control — your space-themed task management app.\n\nHere, your tasks are missions: launch one with todo, deadline, or event, then track them as they orbit your task list. What mission shall we plan?");
     }
 
     /** Injects the Michael instance used to process commands. */
