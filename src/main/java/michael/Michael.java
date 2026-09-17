@@ -142,8 +142,8 @@ public class Michael {
         try {
             switch (commandWord) {
                 case "list":
-                    if (list.getTasks().isEmpty()) return "Your task list is empty.";
-                    StringBuilder result = new StringBuilder("Here are your tasks:\n");
+                    if (list.getTasks().isEmpty()) return "🌑 Your task orbit is empty.";
+                    StringBuilder result = new StringBuilder("🛰 Star chart — tasks currently in orbit:\n");
                     for (int i = 0; i < list.getTasks().size(); i++) {
                         result.append(i + 1).append(". ").append(list.getTasks().get(i)).append('\n');
                     }
@@ -155,45 +155,45 @@ public class Michael {
                     Task marked = list.mark(Parser.parseTaskIndex(commandArgs, "mark"));
                     storage.save(list);
                     previousState = markState;
-                    return "Marked as done:\n" + marked;
+                    return "✅ Mission complete — marked as done:\n" + marked;
                 case "unmark":
                     TaskList unmarkState = list.snapshot();
                     Task unmarked = list.unmark(Parser.parseTaskIndex(commandArgs, "unmark"));
                     storage.save(list);
                     previousState = unmarkState;
-                    return "Marked as not done:\n" + unmarked;
+                    return "🔭 Mission reopened — marked as not done:\n" + unmarked;
                 case "delete":
                     TaskList deleteState = list.snapshot();
                     Task deleted = list.delete(Parser.parseTaskIndex(commandArgs, "delete"));
                     storage.save(list);
                     previousState = deleteState;
-                    return "Deleted:\n" + deleted;
+                    return "☄️ Task sent beyond the event horizon:\n" + deleted;
                 case "todo":
                     TaskList todoState = list.snapshot();
                     Task todo = Parser.parseTodo(commandArgs);
                     list.add(todo);
                     storage.save(list);
                     previousState = todoState;
-                    return "Added:\n" + todo;
+                    return "🚀 New mission launched:\n" + todo;
                 case "deadline":
                     TaskList deadlineState = list.snapshot();
                     Task deadline = Parser.parseDeadline(commandArgs);
                     list.add(deadline);
                     storage.save(list);
                     previousState = deadlineState;
-                    return "Added:\n" + deadline;
+                    return "🚀 Deadline mission launched:\n" + deadline;
                 case "event":
                     TaskList eventState = list.snapshot();
                     Task event = Parser.parseEvent(commandArgs);
                     list.add(event);
                     storage.save(list);
                     previousState = eventState;
-                    return "Added:\n" + event;
+                    return "🚀 Event mission launched:\n" + event;
                 case "find":
                     List<Task> matches = list.find(Parser.parseFind(commandArgs));
-                    return matches.isEmpty() ? "No matching tasks found." : matches.toString();
+                    return matches.isEmpty() ? "🌌 No matching signals found." : "📡 Matching signals from your task orbit:\n" + matches;
                 case "bye":
-                    return "Bye. Hope we meet again!";
+                    return "👋 Disengaging from mission control. Safe travels among the stars!";
                 default:
                     throw new MichaelException("Sorry, I don't know what that means.");
             }

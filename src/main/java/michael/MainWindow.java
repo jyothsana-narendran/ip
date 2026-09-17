@@ -24,9 +24,10 @@ public class MainWindow extends AnchorPane {
 
     @FXML
     public void initialize() {
+        getStylesheets().add(MainWindow.class.getResource("/view/space-theme.css").toExternalForm());
         dialogContainer.setPadding(new Insets(12, 8, 12, 8));
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
-        addMichaelMessage("Hi! I'm Michael. How may I help you?");
+        addMichaelMessage("🌌 Mission control online. What shall we send into orbit?");
     }
 
     /** Injects the Michael instance used to process commands. */
