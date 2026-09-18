@@ -41,7 +41,7 @@ class MichaelUndoTest {
 
         michael.processCommand("todo buy milk");
 
-        assertEquals("📡 Matching signals from your task orbit:\n[T][ ] buy milk",
+        assertEquals("📡 Matching signals from your task orbit:\n[[T][ ] buy milk]",
                 michael.processCommand("find milk"));
     }
 
