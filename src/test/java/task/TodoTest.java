@@ -43,6 +43,14 @@ class TodoTest {
     }
 
     @Test
+    @DisplayName("Should preserve the task description")
+    void getDescription_validTodo_returnsDescription() throws MichaelException {
+        Todo todo = new Todo("read book");
+
+        assertEquals("read book", todo.getDescription());
+    }
+
+    @Test
     @DisplayName("Should throw MichaelException when description is null")
     void constructor_nullDescription_throwsMichaelException() {
         assertThrows(MichaelException.class, () -> new Todo(null));
