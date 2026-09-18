@@ -26,4 +26,12 @@ class MichaelUndoTest {
         michael.processCommand("list");
         assertEquals("Undid the last command.", michael.processCommand("undo"));
     }
+
+    @Test
+    void byeReturnsGoodbyeMessage() throws Exception {
+        Michael michael = new Michael(Files.createTempFile("michael-bye-", ".txt").toString());
+
+        assertEquals("👋 Disengaging from mission control. Safe travels among the stars!",
+                michael.processCommand("bye"));
+    }
 }
