@@ -107,6 +107,15 @@ class TaskListTest {
             assertFalse(unmarkedTask.getStatusIcon().equals("X"));
             assertEquals(task1, unmarkedTask);
         }
+
+        @Test
+        @DisplayName("find() returns tasks containing the keyword")
+        void find_matchingKeyword_returnsMatchingTask() throws MichaelException {
+            taskList.add(task1);
+            taskList.add(task2);
+
+            assertEquals(List.of(task1), taskList.find("task 1"));
+        }
     }
 
     @Nested
