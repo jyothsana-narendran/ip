@@ -44,4 +44,13 @@ class MichaelUndoTest {
         assertEquals("📡 Matching signals from your task orbit:\n[T][ ] buy milk",
                 michael.processCommand("find milk"));
     }
+
+    @Test
+    void invalidCommandSetsErrorFlag() throws Exception {
+        Michael michael = new Michael(Files.createTempFile("michael-error-", ".txt").toString());
+
+        michael.processCommand("unknown");
+
+        assertEquals(true, michael.wasLastResponseError());
+    }
 }
