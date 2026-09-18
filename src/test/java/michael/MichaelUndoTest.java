@@ -34,4 +34,14 @@ class MichaelUndoTest {
         assertEquals("👋 Disengaging from mission control. Safe travels among the stars!",
                 michael.processCommand("bye"));
     }
+
+    @Test
+    void findReturnsMatchingTasks() throws Exception {
+        Michael michael = new Michael(Files.createTempFile("michael-find-", ".txt").toString());
+
+        michael.processCommand("todo buy milk");
+
+        assertEquals("📡 Matching signals from your task orbit:\n[T][ ] buy milk",
+                michael.processCommand("find milk"));
+    }
 }
