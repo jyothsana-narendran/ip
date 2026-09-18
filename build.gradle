@@ -22,8 +22,10 @@ sourceSets {
 }
 
 dependencies {
-    implementation 'org.openjfx:javafx-controls:25'
-    implementation 'org.openjfx:javafx-fxml:25'
+    // Select the macOS JavaFX artifacts so Shadow can package the actual
+    // JavaFX classes and native libraries into the submitted fat JAR.
+    implementation 'org.openjfx:javafx-controls:25:mac'
+    implementation 'org.openjfx:javafx-fxml:25:mac'
 
     String jUnitVersion = '5.14.4'
 
