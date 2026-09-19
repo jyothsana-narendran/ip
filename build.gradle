@@ -22,10 +22,15 @@ sourceSets {
 }
 
 dependencies {
-    // Select the macOS JavaFX artifacts so Shadow can package the actual
-    // JavaFX classes and native libraries into the submitted fat JAR.
-    implementation 'org.openjfx:javafx-controls:25:mac'
-    implementation 'org.openjfx:javafx-fxml:25:mac'
+    // Include JavaFX artifacts for every grading platform. Shadow packages
+    // the classes and native libraries into one fat JAR; JavaFX selects the
+    // matching native library for the operating system at runtime.
+    ['linux', 'mac', 'win'].each { platform ->
+        implementation "org.openjfx:javafx-base:25:${platform}"
+        implementation "org.openjfx:javafx-graphics:25:${platform}"
+        implementation "org.openjfx:javafx-controls:25:${platform}"
+        implementation "org.openjfx:javafx-fxml:25:${platform}"
+    }
 
     String jUnitVersion = '5.14.4'
 
@@ -51,6 +56,7 @@ test {
 
 application {
     mainClass = 'michael.Main'
+    applicationDefaultJvmArgs = ['--enable-native-access=javafx.graphics']
 }
 
 jar {
@@ -66,4 +72,5 @@ shadowJar {
 
 run {
     standardInput = System.in
+    jvmArgs '--enable-native-access=javafx.graphics'
 }
