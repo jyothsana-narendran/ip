@@ -55,8 +55,9 @@ test {
 }
 
 application {
-    mainClass = 'michael.Main'
-    applicationDefaultJvmArgs = ['--enable-native-access=javafx.graphics']
+    // Launch through a plain main class so java -jar does not use the
+    // launcher path that expects JavaFX modules outside the JAR.
+    mainClass = 'michael.Launcher'
 }
 
 jar {
@@ -72,5 +73,4 @@ shadowJar {
 
 run {
     standardInput = System.in
-    jvmArgs '--enable-native-access=javafx.graphics'
 }
